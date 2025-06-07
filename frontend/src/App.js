@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
+import { Container } from 'react-bootstrap';
+
+
 import Header from './components/Header';
 import Footer from './components/Footer';
-import { Container } from 'react-bootstrap';
+import HomeScreen from './screens/HomeScreen';
+
 class App extends Component {
   render() {
     return (
@@ -9,7 +13,7 @@ class App extends Component {
         <Header />
         <main className='py-3'>
          <Container>
-            <h1>Welcome to the React App</h1>
+            <HomeScreen />
           </Container>
         </main>
         <Footer />
