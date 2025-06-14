@@ -7,6 +7,7 @@ import Footer from './components/Footer';
 import HomeScreen from './screens/HomeScreen';
 import ProductScreen from './screens/ProductScreen';
 import CartScreen from './screens/CartScreen';
+import LoginScreen from './screens/LoginScreen';
 
 class App extends Component {
   render() {
@@ -17,9 +18,9 @@ class App extends Component {
           <Container>
             <Routes>
               <Route path='/' element={<HomeScreen />} />
+              <Route path='/login' element={<LoginScreen />} />
               <Route path='/product/:id' element={<ProductScreen />} />
               <Route path='/cart/:id?' element={<CartScreen/>} />
-              <Route path='/login' element={<div>Login Screen</div>} />
               <Route path='/register' element={<div>Register Screen</div>} />
             </Routes>
           </Container>
