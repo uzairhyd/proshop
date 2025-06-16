@@ -11,9 +11,9 @@ function RegisterScreen() {
 
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
-    const[password, setPassword] = useState('')
-    const[confirmPassword, setConfirmPassword] = useState('')
-    const[message, setMessage] = useState('')
+    const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const [message, setMessage] = useState('')
 
     const dispatch = useDispatch()
 
@@ -35,8 +35,6 @@ function RegisterScreen() {
     const submitHandler =(e) => {
         e.preventDefault()
         if (password !== confirmPassword) {
-            console.log(password)
-            console.log(confirmPassword)
             setMessage('Passwords do not match')
             return
         } else {
