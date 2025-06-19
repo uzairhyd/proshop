@@ -3,7 +3,7 @@ import {
     CART_ADD_ITEM, 
     CART_REMOVE_ITEM, 
     CART_SAVE_SHIPPING_ADDRESS,
-    CART_SAVE_PAYMENT_METHOD } from '../constants/cartConstants'; 
+    } from '../constants/cartConstants'; 
 
 
 export const addToCart = (productId, qty) => async (dispatch, getState) => {
@@ -33,4 +33,15 @@ export const removeFromCart = (id) => (dispatch, getState) => {
 
     // Save the updated cart to local storage
     localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems));
+}   
+
+
+export const saveShippingAddress = (data) => (dispatch) => {
+    dispatch({
+        type: CART_SAVE_SHIPPING_ADDRESS,
+        payload: data
+    });
+
+    // Save the updated cart to local storage
+    localStorage.setItem('shippingAddress', JSON.stringify(data));
 }   

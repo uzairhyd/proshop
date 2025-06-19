@@ -17,17 +17,24 @@ function LoginScreen() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const redirect = location.search ? location.search.split('=')[1] : '/'
+    const redirect = location.search ? location.search.split('=')[1] : '/';
 
 
     const userLogin = useSelector(state => state.userLogin)
     const { error, loading, userInfo } = userLogin
 
-    useEffect(()=>{
-        if (userInfo){
-            navigate(redirect)
+    // useEffect(()=>{
+    //     if (userInfo){
+    //         navigate(redirect)
+    //     }
+    // },[navigate, userInfo, redirect])
+
+    useEffect(() => {
+        if (userInfo) {
+            // Ensure redirect is absolute
+            navigate(redirect.startsWith('/') ? redirect : `/${redirect}`);
         }
-    },[navigate, userInfo, redirect])
+    }, [navigate, userInfo, redirect]);
 
     const submitHandler =(e) => {
         e.preventDefault()
