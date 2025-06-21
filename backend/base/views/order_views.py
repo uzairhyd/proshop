@@ -58,20 +58,5 @@ def addOrderItems(request):
             product.save()
         
 
-        return Response('ORDER')
-
-        for item in orderItems:
-            product = Product.objects.get(id=item['product'])
-            orderItem = OrderItem.objects.create(
-                product=product,
-                order=order,
-                name=product.name,
-                qty=item['qty'],
-                price=item['price'],
-                image=product.image.url,
-            )
-            product.count_in_stock -= item['qty']
-            product.save()
-
         serializer = OrderSerializer(order, many=False)
         return Response(serializer.data)
