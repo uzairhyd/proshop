@@ -27,17 +27,17 @@ def addOrderItems(request):
         #(1)Create order
         order = Order.objects.create(
             user=user,
-            payment_method=data['paymentMethod'],
-            tax_price=data['taxPrice'],
-            shipping_price=data['shippingPrice'],
-            total_price=data['totalPrice']
+            paymentMethod=data['paymentMethod'],
+            taxPrice=data['taxPrice'],
+            shippingPrice=data['shippingPrice'],
+            totalPrice=data['totalPrice']
         )
         #(2)Create shipping address
         shipping = ShippingAddress.objects.create(
             order=order,
             address=data['shippingAddress']['address'],
             city=data['shippingAddress']['city'],
-            postal_code=data['shippingAddress']['postalCode'],
+            postalCode=data['shippingAddress']['postalCode'],
             country=data['shippingAddress']['country'],
         )
         #(3)Create order items and set the order to orderItem relationship
@@ -54,9 +54,9 @@ def addOrderItems(request):
 
             #(4)Update stock of products
 
-            product.count_in_stock -= item.qty
+            product.countInStock -= item.qty
             product.save()
         
 
-        serializer = OrderSerializer(order, many=False)
-        return Response(serializer.data)
+            serializer = OrderSerializer(order, many=False)
+            return Response(serializer.data)

@@ -10,7 +10,12 @@ import {
   userLoginReducer, 
   userRegisterReducer, 
   userDetailsReducer,
-  userUpdateProfileReducer } from './reducers/userReducers'
+  userUpdateProfileReducer 
+} from './reducers/userReducers'
+
+import { orderCreateReducer } from './reducers/orderReducers';
+
+
 
 
 
@@ -36,7 +41,8 @@ const store = configureStore({
     userLogin: userLoginReducer,
     userRegister: userRegisterReducer,
     userDetails: userDetailsReducer,
-    userUpdateProfile: userUpdateProfileReducer
+    userUpdateProfile: userUpdateProfileReducer,
+    orderCreate: orderCreateReducer,
   },
     preloadedState: {
         cart: {   
