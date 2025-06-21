@@ -10,7 +10,12 @@ import {
   userLoginReducer, 
   userRegisterReducer, 
   userDetailsReducer,
-  userUpdateProfileReducer } from './reducers/userReducers'
+  userUpdateProfileReducer 
+} from './reducers/userReducers'
+
+import { orderCreateReducer } from './reducers/orderReducers';
+
+
 
 
 
@@ -23,6 +28,10 @@ const userInfoFromStorage = localStorage.getItem('userInfo')
   ? JSON.parse(localStorage.getItem('userInfo'))
   : null;
 
+  const shippingAddressFromStorage = localStorage.getItem('shippingAddress') 
+  ? JSON.parse(localStorage.getItem('shippingAddress'))
+  : {};
+
 const store = configureStore({
   reducer: {
     // Add your reducers here
@@ -32,10 +41,13 @@ const store = configureStore({
     userLogin: userLoginReducer,
     userRegister: userRegisterReducer,
     userDetails: userDetailsReducer,
-    userUpdateProfile: userUpdateProfileReducer
+    userUpdateProfile: userUpdateProfileReducer,
+    orderCreate: orderCreateReducer,
   },
     preloadedState: {
-        cart: { cartItems: cartItemsFromStorage },
+        cart: {   
+                cartItems: cartItemsFromStorage,
+                shippingAddress: shippingAddressFromStorage },
         userLogin: { userInfo: userInfoFromStorage }
     }, // Initial state can be set here if needed
   middleware: (getDefaultMiddleware) =>
