@@ -82,6 +82,7 @@ export const getOrderDetails = (id) => async (dispatch, getState) => {
             `/api/orders/${id}/`,
             config
         )
+        console.log(`Fetched Order Details:`, data);
 
         dispatch({
             type: ORDER_DETAILS_SUCCESS,
