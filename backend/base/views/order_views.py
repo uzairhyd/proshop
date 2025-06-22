@@ -82,17 +82,10 @@ def getOrderById(request, pk):
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def updateOrderToPaid(request, pk):
-    user = request.user
-    try:
-        order = Order.objects.get(_id=pk)
-        if user.is_staff or order.user == user:
-            order.isPaid = True
-            order.paidAt = datetime.now()
-            order.save()
-            return Response('Order was paid')
-        else:
-            return Response({'detail': 'Not authorized to update this order'}, status=status.HTTP_400_BAD_REQUEST)
-    except Order.DoesNotExist:
-        return Response({'detail': 'Order does not exist'}, status=status.HTTP_400_BAD_REQUEST)
-    except Exception as e:
-        return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    print("hello update order to paid")
+    order = Order.objects.get(_id=pk)
+    order.isPaid = True
+    order.paidAt = datetime.now()
+    order.save()
+    return Response('Order was paid')
+        
