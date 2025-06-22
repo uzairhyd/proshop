@@ -13,7 +13,7 @@ import {
   userUpdateProfileReducer 
 } from './reducers/userReducers'
 
-import { orderCreateReducer, orderDetailsReducer } from './reducers/orderReducers';
+import { orderCreateReducer, orderDetailsReducer, orderPayReducer } from './reducers/orderReducers';
 
 
 
@@ -43,7 +43,8 @@ const store = configureStore({
     userDetails: userDetailsReducer,
     userUpdateProfile: userUpdateProfileReducer,
     orderCreate: orderCreateReducer,
-    orderDetails: orderDetailsReducer
+    orderDetails: orderDetailsReducer,
+    orderPay: orderPayReducer,
   },
     preloadedState: {
         cart: {   
