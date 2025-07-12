@@ -52,7 +52,6 @@ def getRoutes(request):
 def registerUser(request):
     data = request.data
 
-    print(data)
     try:
         user = User.objects.create(
             first_name=data['name'],
@@ -65,7 +64,6 @@ def registerUser(request):
         return Response(serializer.data)
 
     except Exception as e: 
-        print(e)
         message = {'detail': 'User with this email already exists'}
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
 

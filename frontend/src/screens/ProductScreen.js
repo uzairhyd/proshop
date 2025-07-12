@@ -22,8 +22,7 @@ function ProductScreen() {
         dispatch(listProductDetails(id))
     },[dispatch]);
 
-    const addToCartHandler = () => {
-      //console.log(`Adding ${qty} of product ID ${id} to cart`);    
+    const addToCartHandler = () => { 
       navigate(`/cart/${id}?qty=${qty}`);
     }
 
