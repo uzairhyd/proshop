@@ -15,7 +15,6 @@ function OrderScreen() {
 
     const orderDetails = useSelector((state) => state.orderDetails)
     const { order, error, loading } = orderDetails
-    console.log('Order Details: ', order)
 
     const orderPay = useSelector((state) => state.orderPay)
     const { loading: loadingPay, success: successPay } = orderPay
@@ -33,7 +32,6 @@ function OrderScreen() {
     }, [dispatch, order, orderId, successPay])
 
     const successPaymentHandler = (paymentResult) => {
-        console.log('Payment Result: Success::: ', paymentResult)
         dispatch(payOrder(orderId, paymentResult))
     }
 
