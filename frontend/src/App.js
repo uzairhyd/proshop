@@ -14,6 +14,7 @@ import ShippingScreen from './screens/ShippingScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import PlaceOrderScreen from './screens/PlaceOrderScreen';
 import OrderScreen from './screens/OrderScreen';
+import UserListScreen from './screens/UserListScreen';
 
 class App extends Component {
   render() {
@@ -33,6 +34,8 @@ class App extends Component {
               <Route path='/payment' element={<PaymentScreen />} />
               <Route path='/product/:id' element={<ProductScreen />} />
               <Route path='/cart/:id?' element={<CartScreen/>} />
+              <Route path='/admin/userlist' element={<UserListScreen />} />
+              {/* Add more routes as needed */}
             </Routes>
           </Container>
         </main>

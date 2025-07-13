@@ -10,7 +10,8 @@ import {
   userLoginReducer, 
   userRegisterReducer, 
   userDetailsReducer,
-  userUpdateProfileReducer 
+  userUpdateProfileReducer ,
+  userListReducer,
 } from './reducers/userReducers'
 
 import { orderCreateReducer, orderDetailsReducer, orderPayReducer, orderListMyReducer } from './reducers/orderReducers';
@@ -42,6 +43,7 @@ const store = configureStore({
     userRegister: userRegisterReducer,
     userDetails: userDetailsReducer,
     userUpdateProfile: userUpdateProfileReducer,
+    userList: userListReducer,
     orderCreate: orderCreateReducer,
     orderDetails: orderDetailsReducer,
     orderPay: orderPayReducer,
