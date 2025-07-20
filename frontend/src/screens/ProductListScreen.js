@@ -1,44 +1,60 @@
 import React, {useState, useEffect} from 'react'
 import { Link, useParams, useLocation, useNavigate } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap';
-import { Table, Button } from 'react-bootstrap'
+import { Table, Button, Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
-import { listUsers, deleteUser } from '../actions/userActions'
+import { listProducts } from '../actions/productActions'
 
 function ProductListScreen() {
   const dispatch = useDispatch()
   const navigate = useNavigate();
-  const userList = useSelector(state => state.userList)
-  const { loading, error, users } = userList
+
+  const productList = useSelector(state => state.productList)
+  const { loading, error, products } = productList
 
 
   const userLogin = useSelector(state => state.userLogin)
   const { userInfo } = userLogin
 
-  const userDelete = useSelector(state => state.userDelete)
-  const { success: successDelete } = userDelete   
 
   useEffect(() => {
     if(userInfo && userInfo.isAdmin) {
-      dispatch(listUsers())
+      dispatch(listProducts())
     }
     else {
       navigate('/login')
     }
-  }, [dispatch, userInfo, navigate, successDelete])
+  }, [dispatch, userInfo, navigate, userInfo])
 
   const deleteHander = (id) => {
-    if (window.confirm('Are you sure you want to delete this user?')) {
+    if (window.confirm('Are you sure you want to delete this product?')) {
       // Dispatch delete user action here
-      dispatch(deleteUser(id))
+      //dispatch(deleteProduct(id))
     }
   } 
+
+  const createProductHandler = (product) => {
+    // Dispatch create product action here
+    // navigate to create product screen
+    navigate('/admin/product/create')
+  }
   
   return (
     <div>
-      <h1>Users</h1>
+      <Row className='align-items-center'>
+        <Col>
+          <h1>Products</h1>
+        </Col>
+        <Col className='text-right'>
+          <Link to='/admin/product/create'>
+            <Button className='my-3' onClick={createProductHandler}>
+              <i className='fas fa-plus'></i> Create Product
+            </Button>
+          </Link>
+        </Col>
+      </Row>
       {loading ? (
         <Loader />
       ) : error ? (
@@ -49,31 +65,31 @@ function ProductListScreen() {
             <tr>
               <th>ID</th>
               <th>Name</th>
-              <th>Email</th>
-              <th>Admin</th>
+              <th>Price</th>
+              <th>Category</th>
+              <th>Stock</th>
+              <th>Brand</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            {users.map(user => (
-              <tr key={user._id}>
-                <td>{user._id}</td>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>{user.isAdmin ? (
-                  <i className='fas fa-check' style={{ color: 'green' }}></i>
-                ) : (
-                  <i className='fas fa-times' style={{ color: 'red' }}></i>
-                )}</td>
+            {products.map(product => (
+              <tr key={product._id}>
+                <td>{product._id}</td>
+                <td>{product.name}</td>
+                <td>${product.price}</td>
+                <td>{product.category}</td>
+                <td>{product.countInStock}</td>
+                <td>{product.brand}</td>
                 <td>
-                  <LinkContainer to={`/admin/user/${user._id}/edit`}>
+                  <LinkContainer to={`/admin/product/${product._id}/edit`}>
                     <Button variant='light' className='btn-sm'>
                       <i className='fas fa-edit'></i>
                     </Button>
                   </LinkContainer>
-                  <Button variant='danger' className='btn-sm' onClick={() => deleteHander(user._id)}>
+                  <Button variant='danger' className='btn-sm' onClick={() => deleteHander(product._id)}>
                     <i className='fas fa-trash'></i>
-                  </Button> 
+                  </Button>
                 </td>
               </tr>
             ))}
