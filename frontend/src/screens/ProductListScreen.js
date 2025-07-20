@@ -5,7 +5,7 @@ import { Table, Button, Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
-import { listProducts } from '../actions/productActions'
+import { listProducts, deleteProduct } from '../actions/productActions'
 
 function ProductListScreen() {
   const dispatch = useDispatch()
@@ -13,6 +13,9 @@ function ProductListScreen() {
 
   const productList = useSelector(state => state.productList)
   const { loading, error, products } = productList
+
+  const productDelete = useSelector(state => state.productDelete)
+  const { loading:loadingDelete, error: errorDelete, success: successDelete } = productDelete
 
 
   const userLogin = useSelector(state => state.userLogin)
@@ -26,12 +29,12 @@ function ProductListScreen() {
     else {
       navigate('/login')
     }
-  }, [dispatch, userInfo, navigate, userInfo])
+  }, [dispatch, userInfo, navigate, userInfo, successDelete])
 
-  const deleteHander = (id) => {
+  
+  const deleteHandler = (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
-      // Dispatch delete user action here
-      //dispatch(deleteProduct(id))
+      dispatch(deleteProduct(id))
     }
   } 
 
@@ -55,6 +58,8 @@ function ProductListScreen() {
           </Link>
         </Col>
       </Row>
+      {loadingDelete && <Loader />}
+      {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
       {loading ? (
         <Loader />
       ) : error ? (
@@ -87,7 +92,7 @@ function ProductListScreen() {
                       <i className='fas fa-edit'></i>
                     </Button>
                   </LinkContainer>
-                  <Button variant='danger' className='btn-sm' onClick={() => deleteHander(product._id)}>
+                  <Button variant='danger' className='btn-sm' onClick={() => deleteHandler(product._id)}>
                     <i className='fas fa-trash'></i>
                   </Button>
                 </td>
