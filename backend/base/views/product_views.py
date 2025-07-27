@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
 
-from base.models import Product
+from base.models import Product, Review
 from base.products import products
 
 from base.serializer import ProductSerializer
@@ -100,4 +100,47 @@ def uploadImage(request):
     return Response('Image was uploaded')
 
     # serializer = ProductSerializer(product, many=False)
+    # return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def createProductReview(request, pk):
+    data = request.data
+    user = request.user
+    product = Product.objects.get(_id=pk)
+
+    #1 Check if the user has already reviewed the product
+    alreadyExists = product.reviews.filter(user=user).exists()
+    if alreadyExists:
+        content = {'detail': 'You have already reviewed this product'}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    
+    #2 Check if the rating is between 1 and 5
+    if data['rating'] < 1 or data['rating'] > 5:
+        content = {'detail': 'Rating must be between 1 and 5'}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    
+    #3 Create the review
+    review = Review.objects.create(
+        user=user,
+        product=product,
+        rating=data['rating'],
+        comment=data['comment']
+    )
+
+    # product.numReviews += 1
+    # product.rating = (product.rating * (product.numReviews - 1) + data['rating']) / product.numReviews
+    # product.save()
+    reviews = product.reviews.all()
+    product.numReviews = len(reviews)
+    
+    total=0
+    for i in reviews:
+        total += i.rating
+    product.rating = total / len(reviews) if reviews else 0 
+
+    product.save()  
+    return Response('Review added')
+
+    # serializer = ReviewSerializer(review, many=False)
     # return Response(serializer.data)
