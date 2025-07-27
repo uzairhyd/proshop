@@ -31,6 +31,9 @@ function OrderScreen() {
     }
 
     useEffect(() => {
+        if (!userInfo) {
+            navigate('/login')
+        }
         if (!order || successPay || order._id !== Number(orderId) || successDeliver) {
             dispatch({ type: ORDER_PAY_RESET }) // Reset the pay state
             dispatch({ type: ORDER_DELIVER_RESET }) // Reset the deliver state
