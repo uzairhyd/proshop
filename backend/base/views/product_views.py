@@ -16,9 +16,13 @@ from rest_framework import status
 
 @api_view(['GET'])
 def getProducts(request):
-    products = Product.objects.all()
-    serialzier = ProductSerializer(products, many=True)
-    return Response(serialzier.data)
+    keyword = request.query_params.get('keyword', '')
+    if keyword != '':
+        products = Product.objects.filter(name__icontains=keyword)
+    else:
+        products = Product.objects.all()
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])
@@ -108,10 +112,10 @@ def createProductReview(request, pk):
     data = request.data
     user = request.user
     product = Product.objects.get(_id=pk)
-    print(data)
+    print("user: ",user)
 
     #1 Check if the user has already reviewed the product
-    alreadyExists = product.reviews.filter(user=user).exists()
+    alreadyExists = product.reviews.filter(user=user.id).exists()
     if alreadyExists:
         content = {'detail': 'You have already reviewed this product'}
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
