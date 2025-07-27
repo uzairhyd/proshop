@@ -108,6 +108,7 @@ def createProductReview(request, pk):
     data = request.data
     user = request.user
     product = Product.objects.get(_id=pk)
+    print(data)
 
     #1 Check if the user has already reviewed the product
     alreadyExists = product.reviews.filter(user=user).exists()
@@ -116,7 +117,12 @@ def createProductReview(request, pk):
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
     
     #2 Check if the rating is between 1 and 5
-    if data['rating'] < 1 or data['rating'] > 5:
+    try:
+        rating = int(data['rating'])
+    except (ValueError, TypeError):
+        return Response({'detail': 'Invalid rating value'}, status=status.HTTP_400_BAD_REQUEST)
+
+    if rating < 1 or rating > 5:
         content = {'detail': 'Rating must be between 1 and 5'}
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
     
@@ -124,7 +130,8 @@ def createProductReview(request, pk):
     review = Review.objects.create(
         user=user,
         product=product,
-        rating=data['rating'],
+        name=user.first_name,
+        rating=rating,
         comment=data['comment']
     )
 
