@@ -3,6 +3,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser 
 from rest_framework.response import Response
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 from base.models import Product, Review
@@ -16,13 +17,37 @@ from rest_framework import status
 
 @api_view(['GET'])
 def getProducts(request):
-    keyword = request.query_params.get('keyword', '')
-    if keyword != '':
-        products = Product.objects.filter(name__icontains=keyword)
-    else:
+    query = request.query_params.get('keyword', None)
+    # Treat both None and empty string as no search
+    if not query:
         products = Product.objects.all()
+    else:
+        products = Product.objects.filter(name__icontains=query)
+    print('PRODUCT COUNT:', products.count())
+
+    page = request.query_params.get('page', 1)
+    try:
+        page = int(page)
+        if page < 1:
+            page = 1
+    except (ValueError, TypeError):
+        page = 1
+
+    paginator = Paginator(products, 5)  # Show 5 products per page
+
+    try:
+        products = paginator.page(page)
+    except PageNotAnInteger:
+        products = paginator.page(1)
+    except EmptyPage:
+        products = paginator.page(paginator.num_pages)
+
     serializer = ProductSerializer(products, many=True)
-    return Response(serializer.data)
+    return Response({
+        'products': serializer.data,
+        'page': page,
+        'pages': paginator.num_pages
+    })
 
 
 @api_view(['GET'])
