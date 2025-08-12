@@ -7,26 +7,18 @@ function Paginate({ pages, page, keyword = '', isAdmin = false }) {
 
     return (
         <Pagination>
-            {[...Array(pages).keys()].map((x) => {
-                // Only include keyword if it's not empty
-                let search = keyword
-                    ? `?keyword=${keyword}&page=${x + 1}`
-                    : `?page=${x + 1}`
-
-                return (
-                    <LinkContainer
-                        key={x + 1}
-                        to={{
-                            pathname: isAdmin ? '/admin/productlist/' : '/',
-                            search: search
-                        }}
-                    >
-                        <Pagination.Item active={x + 1 === Number(page)}>
-                            {x + 1}
-                        </Pagination.Item>
-                    </LinkContainer>
-                )
-            })}
+            {[...Array(pages).keys()].map((x) => (
+                <LinkContainer
+                    key={x + 1}
+                    to={{
+                        pathname: isAdmin ? '/admin/productlist/' : '/',
+                        search: `?keyword=${keyword}&page=${x + 1}`,
+                    }}
+                    activeClassName=""
+                >
+                    <Pagination.Item active={x + 1 === page}>{x + 1}</Pagination.Item>
+                </LinkContainer>
+            ))}
         </Pagination>
     )
 }
