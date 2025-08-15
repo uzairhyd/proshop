@@ -1,25 +1,33 @@
 import React, {useState, useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col } from 'react-bootstrap';
+import { useLocation } from 'react-router-dom';
 import Product from '../components/Product';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import Paginate from '../components/Paginate';
 import { listProducts } from '../actions/productActions';
+import ProductCarousel from '../components/ProductCarousel';
 
 
 function HomeScreen() {
   const dispatch = useDispatch();
 
   const productList = useSelector((state) => state.productList);
-  const { loading, error, products } = productList;
+  const { loading, error, products, page, pages } = productList;
+
+  const location = useLocation();
+  const keyword = new URLSearchParams(location.search).get('keyword') || '';
+  const pageNumber = new URLSearchParams(location.search).get('page') || 1;
 
   useEffect(() => {
-    dispatch(listProducts());
-  },[dispatch]);
+    dispatch(listProducts(keyword, pageNumber));
+  }, [dispatch, keyword, pageNumber]);
 
 
   return (
     <div>
+      {!keyword && <ProductCarousel />}
         <h1>Latest Products</h1>
         {
           loading ? (
@@ -27,6 +35,7 @@ function HomeScreen() {
           ) : error ? (
             <Message variant='danger'>{error}</Message>
           ) :
+            <div>    
               <Row>
                 {products.map((product) => (
                   <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
@@ -34,6 +43,8 @@ function HomeScreen() {
                   </Col>
                 ))} 
               </Row>
+              <Paginate pages={pages} page={page} keyword={keyword} />
+            </div>
         }
        
     </div>
