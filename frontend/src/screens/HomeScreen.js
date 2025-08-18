@@ -8,6 +8,7 @@ import Message from '../components/Message';
 import Paginate from '../components/Paginate';
 import { listProducts } from '../actions/productActions';
 import ProductCarousel from '../components/ProductCarousel';
+import CategoryBar from '../components/CategoryBar';
 
 
 function HomeScreen() {
@@ -19,14 +20,17 @@ function HomeScreen() {
   const location = useLocation();
   const keyword = new URLSearchParams(location.search).get('keyword') || '';
   const pageNumber = new URLSearchParams(location.search).get('page') || 1;
+  const category = new URLSearchParams(location.search).get('category') || '';
+
 
   useEffect(() => {
-    dispatch(listProducts(keyword, pageNumber));
-  }, [dispatch, keyword, pageNumber]);
+    dispatch(listProducts(keyword, pageNumber, category));
+  }, [dispatch, keyword, pageNumber, category]);
 
 
   return (
     <div>
+      <CategoryBar />
       {!keyword && <ProductCarousel />}
         <h1>Latest Products</h1>
         {

@@ -6,23 +6,39 @@ from rest_framework.response import Response
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
-from base.models import Product, Review
+from base.models import Product, Review, Category
 from base.products import products
 
-from base.serializer import ProductSerializer
+from base.serializer import ProductSerializer, CategorySerializer
 
 
 from rest_framework import status
   
 
 @api_view(['GET'])
+def getCategories(request):
+    categories = Category.objects.all()
+    serializer = CategorySerializer(categories, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
 def getProducts(request):
     query = request.query_params.get('keyword', None)
-    # Treat both None and empty string as no search
-    if not query:
-        products = Product.objects.all()
-    else:
-        products = Product.objects.filter(name__icontains=query)
+    category_name = request.query_params.get('category', None)
+    print('QUERY:', query)
+    print('CATEGORY NAME:', category_name)
+
+    products = Product.objects.all()
+
+    # Filter by keyword if provided
+    if query:
+        products = products.filter(name__icontains=query)
+
+    # Filter by category if provided
+    if category_name:
+        products = products.filter(category__name=category_name)
+
     print('PRODUCT COUNT:', products.count())
 
     page = request.query_params.get('page', 1)
